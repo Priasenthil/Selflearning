@@ -4,7 +4,7 @@ name: Deploy data pipeline
 on:
   push:
     branches:
-      - dev
+      - Dev
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -42,15 +42,15 @@ jobs:
       # Deploy pipeline with branch specific parameters
       - name: Deploy data pipeline to dev
         run: |
-          BRANCH_NAME=dev
+          BRANCH_NAME=Dev
           if [ "${BRANCH_NAME}" == "prod" ]; then
             RETENTION_TIME=1
           else
             RETENTION_TIME=0
           fi
           snow git execute \
-            "@${REPO_NAME}/branches/dev/Scripts/*" \
-            -D "environment='dev'" \
+            "@${REPO_NAME}/branches/Dev/Scripts/*" \
+            -D "environment='Dev'" \
             -D "retention_time=${RETENTION_TIME}"
 
   manual-approval:
@@ -67,7 +67,7 @@ jobs:
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
-          approvers: Darshini26 # Replace with GitHub usernames, with the free version you can only have an issue assigned to one username
+          approvers: Priasenthil # Replace with GitHub usernames, with the free version you can only have an issue assigned to one username
           minimum-approvals: 1
           issue-title: "Manual Approval Required for Production Deployment"
           issue-body: "Please approve or deny the deployment."
@@ -81,7 +81,7 @@ jobs:
         with:
           github_token: ${{ github.token }}
           source_ref: ${{ github.ref }}
-          target_branch: 'prod'
+          target_branch: 'Prod'
           commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
 
   deploy-prod:
@@ -117,13 +117,13 @@ jobs:
       # Deploy pipeline with branch specific parameters
       - name: Deploy data pipeline to prod
         run: |
-          BRANCH_NAME=prod
-          if [ "${BRANCH_NAME}" == "prod" ]; then
+          BRANCH_NAME=Prod
+          if [ "${BRANCH_NAME}" == "Prod" ]; then
             RETENTION_TIME=1
           else
             RETENTION_TIME=0
           fi
           snow git execute \
-            "@${REPO_NAME}/branches/prod/Scripts/*" \
-            -D "environment='prod'" \
+            "@${REPO_NAME}/branches/Prod/Scripts/*" \
+            -D "environment='Prod'" \
             -D "retention_time=${RETENTION_TIME}"
